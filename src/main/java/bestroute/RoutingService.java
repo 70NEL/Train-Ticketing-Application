@@ -21,7 +21,7 @@ public class RoutingService implements TimeCalculator {
         return path;
     }
 
-    public List<Edge> findPath(String from, String to, String departure) {
+    public List<Edge> findPath(String from, String to, String departure, int requestedNrTickets) {
         Node fromNode = routes.getStation(from);
         Node toNode = routes.getStation(to);
         int time = timeAsInt(departure);
@@ -44,13 +44,15 @@ public class RoutingService implements TimeCalculator {
             }
 
             for(Edge edge : node.getDepartingTrains()) {
-                if(timeAsInt(edge.getDepartureTime()) >= curr.getTime() && edge.getTrain().hasFreeSeats()) {
-                    int arrNextStation = timeAsInt(edge.getArrivalTime());
+                if(timeAsInt(edge.getDepartureTime()) >= curr.getTime()) {
+                    if(edge.getTrain().getBookedSeats() + requestedNrTickets <= edge.getTrain().getNrSeats()) {
+                        int arrNextStation = timeAsInt(edge.getArrivalTime());
 
-                    if(arrNextStation < minArrivalTimes.getOrDefault(edge.getTo(), Integer.MAX_VALUE)) {
-                        minArrivalTimes.put(edge.getTo(), arrNextStation);
-                        pathEdges.put(edge.getTo(), edge);
-                        queue.add(new NodeState(edge.getTo(), arrNextStation));
+                        if(arrNextStation < minArrivalTimes.getOrDefault(edge.getTo(), Integer.MAX_VALUE)) {
+                            minArrivalTimes.put(edge.getTo(), arrNextStation);
+                            pathEdges.put(edge.getTo(), edge);
+                            queue.add(new NodeState(edge.getTo(), arrNextStation));
+                        }
                     }
                 }
             }
