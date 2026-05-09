@@ -9,6 +9,15 @@ public class RoutingService implements TimeCalculator {
         routes = TrainRoutes.getInstance();
     }
 
+    public List<Edge> getAllEdges() {
+        List<Edge> edges = new ArrayList<>();
+        for(Node station : routes.getStations()) {
+            getAllEdges().addAll(station.getDepartingTrains());
+        }
+
+        return edges;
+    }
+
     public List<Edge> pathReconstruction(Map<Node, Edge> pathEdges, Node from, Node to) {
         LinkedList<Edge> path = new LinkedList<>();
         Node current = to;
@@ -44,14 +53,16 @@ public class RoutingService implements TimeCalculator {
             }
 
             for(Edge edge : node.getDepartingTrains()) {
-                if(timeAsInt(edge.getDepartureTime()) >= curr.getTime()) {
-                    if(edge.getTrain().getBookedSeats() + requestedNrTickets <= edge.getTrain().getNrSeats()) {
-                        int arrNextStation = timeAsInt(edge.getArrivalTime());
+                int delay = edge.getTrain().getDelayMinutes();
+                int actualDepartureTime = timeAsInt(edge.getDepartureTime())  +  delay;
+                int actualArrivalTime = timeAsInt(edge.getArrivalTime())  +  delay;
 
-                        if(arrNextStation < minArrivalTimes.getOrDefault(edge.getTo(), Integer.MAX_VALUE)) {
-                            minArrivalTimes.put(edge.getTo(), arrNextStation);
+                if(actualDepartureTime >= curr.getTime()) {
+                    if(edge.getTrain().getBookedSeats() + requestedNrTickets <= edge.getTrain().getNrSeats()) {
+                        if(actualArrivalTime < minArrivalTimes.getOrDefault(edge.getTo(), Integer.MAX_VALUE)) {
+                            minArrivalTimes.put(edge.getTo(), actualArrivalTime);
                             pathEdges.put(edge.getTo(), edge);
-                            queue.add(new NodeState(edge.getTo(), arrNextStation));
+                            queue.add(new NodeState(edge.getTo(), actualArrivalTime));
                         }
                     }
                 }

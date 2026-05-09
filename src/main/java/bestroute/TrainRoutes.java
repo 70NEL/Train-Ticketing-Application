@@ -34,4 +34,15 @@ public class TrainRoutes {
     public Node getStation(String stationName) {
         return stations.get(stationName);
     }
+
+    public Collection<Node> getStations() {
+        return stations.values();
+    }
+
+    public void removeConnection(Edge edge) {
+        Node from = edge.getFrom();
+        if(from != null) {
+            from.getDepartingTrains().remove(edge);
+        }
+    }
 }
