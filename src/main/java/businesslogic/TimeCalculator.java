@@ -1,4 +1,4 @@
-package bestroute;
+package businesslogic;
 
 public interface TimeCalculator {
     default int timeAsInt(String time) {

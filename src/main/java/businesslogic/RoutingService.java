@@ -1,4 +1,6 @@
-package bestroute;
+package businesslogic;
+
+import bestroute.*;
 
 import java.util.*;
 

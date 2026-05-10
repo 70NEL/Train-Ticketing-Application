@@ -2,8 +2,8 @@ package GUI;
 
 import bestroute.*;
 import businesslogic.Booking;
+import businesslogic.RoutingService;
 
-import java.awt.event.ComponentAdapter;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

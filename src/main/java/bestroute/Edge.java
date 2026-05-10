@@ -1,5 +1,7 @@
 package bestroute;
 
+import businesslogic.TimeCalculator;
+
 public class Edge implements TimeCalculator {
     private Node from;
     private Node to;
