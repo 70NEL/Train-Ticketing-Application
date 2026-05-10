@@ -12,7 +12,7 @@ public class RoutingService implements TimeCalculator {
     public List<Edge> getAllEdges() {
         List<Edge> edges = new ArrayList<>();
         for(Node station : routes.getStations()) {
-            getAllEdges().addAll(station.getDepartingTrains());
+            edges.addAll(station.getDepartingTrains());
         }
 
         return edges;

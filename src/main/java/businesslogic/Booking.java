@@ -13,7 +13,7 @@ public class Booking {
     private String email;
     RoutingService routingService = new RoutingService();
 
-    public void confirmBooking(List<Edge> path, int numberOfTickets) {
+    private void confirmBooking(List<Edge> path) {
         for(Edge edge: path) {
             edge.getTrain().addBooking(this);
         }
@@ -22,7 +22,12 @@ public class Booking {
     public void submitBooking(String from, String to, String departureTime, int numberOfTickets, String email) {
         List<Edge> path = routingService.findPath(from, to, departureTime, numberOfTickets);
         if(!path.isEmpty()) {
-            confirmBooking(path, numberOfTickets);
+            this.from = from;
+            this.to = to;
+            this.departureTime = departureTime;
+            this.numberOfTickets = numberOfTickets;
+            this.email = email;
+            confirmBooking(path);
             String message = "Booking successfully submitted for " + numberOfTickets + " tickets, from " + from + " to " + to + "!\n For more information check the confirmation sent to " + email + "!";
             JOptionPane.showMessageDialog(null, message, "Booking confirmation", JOptionPane.INFORMATION_MESSAGE);
         }else {

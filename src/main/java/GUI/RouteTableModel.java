@@ -49,7 +49,7 @@ public class RouteTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        return col == 2 || col == 3;
+        return col == 2 || col == 3 || col == 4;
     }
 
     @Override
@@ -57,8 +57,15 @@ public class RouteTableModel extends AbstractTableModel {
         Edge edge = routes.get(row);
         String newValue = (String) value;
 
-        if (col == 2) edge.setDepartureTime(newValue);
-        if (col == 3) edge.setArrivalTime(newValue);
+        if (col == 2) {
+            edge.setDepartureTime(newValue);
+        }
+        if (col == 3) {
+            edge.setArrivalTime(newValue);
+        }
+        if(col == 4) {
+            edge.getTrain().setId(Integer.parseInt(newValue));
+        }
 
         fireTableCellUpdated(row, col);
     }
